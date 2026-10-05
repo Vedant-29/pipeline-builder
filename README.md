@@ -1,59 +1,57 @@
-# VectorShift Pipeline Builder
+# Pipeline Builder
 
-A visual pipeline builder — drag nodes onto a canvas, wire them together, and submit the graph to a backend that validates it.
+A visual pipeline editor in the browser. Drag nodes onto a canvas, wire them together, and submit the graph to a small FastAPI backend that counts nodes and edges and checks that it has no cycles.
 
-<p>
-  <em>Submitted for the</em> <strong>VectorShift Frontend Technical Assessment</strong>
-  <em>by</em> <a href="https://vectorshift.ai"><em>VectorShift</em></a>.
-  &nbsp;·&nbsp;
-  <a href="./ASSIGNMENT.pdf">Original brief</a>
-</p>
+![Pipeline Builder canvas with connected nodes](docs/hero-light.png)
 
-![VectorShift Pipeline Builder](./docs/hero-light.png)
+[Watch the walkthrough](docs/demo.mp4) (about 5 minutes, covers the app and the code).
 
-> **▶ [Watch the full walkthrough](./docs/demo.mp4)** — a side-by-side tour of the app and the code (~5½ min).
+## Features
 
-## What it does
+- Every node is a config object (title, icon, fields, handles) rendered by one shared component. Adding a node means editing data, not writing a new component.
+- 10 node types, including Math, Filter, API, Note, and Conditional.
+- The Text node grows as you type, and writing `{{variable}}` adds a matching input handle.
+- Submit sends the graph to the backend, which returns the node count, edge count, and whether it is a valid DAG.
+- Undo and redo, a command palette (Cmd+K), save and load, auto-layout, connection validation, keyboard shortcuts, and light and dark themes.
 
-The brief had four parts:
+## Requirements
 
-1. **A reusable node abstraction.** Every node is a small config object — title, icon, fields, handles — rendered by one shared component. Adding a node means editing data, not writing a new component. Ships with the 5 originals plus 5 new ones (Math, Filter, API, Note, Conditional).
-2. **A clean, consistent design.** One warm, minimal theme across every node and control, with light and dark modes.
-3. **A smarter Text node.** It grows to fit its text as you type, and writing a `{{variable}}` adds a matching input handle automatically.
-4. **Backend integration.** Submit sends the graph to a FastAPI service that returns the node count, edge count, and whether it's a valid DAG (no loops) — shown back in the UI.
+- Node.js and npm
+- Python 3 with pip
 
-A few extras on top of the brief: undo / redo, a command palette (⌘K), save / load, auto-layout, connection validation, and keyboard shortcuts.
+## Setup
 
-## Run it
+Run the backend and frontend in two terminals.
 
-Two terminals.
-
-**Backend** — FastAPI on port 8000:
-
-```bash
+```sh
 cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-**Frontend** — Vite:
-
-```bash
+```sh
 cd frontend
 npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually <http://localhost:5173>), build a pipeline, and hit **Submit**.
+Open the URL Vite prints (usually http://localhost:5173), build a pipeline, and click Submit. The frontend calls the backend at `http://localhost:8000/pipelines/parse`, so keep the backend on port 8000.
 
 ## Where things live
 
-| Path | What's there |
+| Path | What is there |
 |---|---|
 | `frontend/src/nodes/registry.js` | Every node, defined as config |
-| `frontend/src/nodes/BaseNode.jsx` | The one component that renders them all |
-| `frontend/src/nodes/textNode.jsx` | The Text node (variables → handles) |
+| `frontend/src/nodes/BaseNode.jsx` | The component that renders all nodes |
+| `frontend/src/nodes/textNode.jsx` | The Text node (variables to handles) |
 | `frontend/src/store.js` | App state |
 | `backend/main.py` | The submit endpoint and DAG check |
 
-Built with React, [@xyflow/react](https://reactflow.dev), zustand, and Tailwind on the frontend; FastAPI on the backend.
+## Notes
+
+- The backend URL is hardcoded in `frontend/src/submit.jsx`. There are no environment variables.
+- The backend allows all CORS origins. It is meant for local use.
+
+## Credits
+
+Built with React, [@xyflow/react](https://reactflow.dev), zustand, and Tailwind on the frontend, and FastAPI on the backend.

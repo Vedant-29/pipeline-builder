@@ -7,7 +7,7 @@ import {
   MarkerType,
 } from '@xyflow/react'
 
-const STORAGE_KEY = 'vectorshift-pipeline'
+const STORAGE_KEY = 'pipeline-builder'
 
 function loadStored() {
   try {

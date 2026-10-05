@@ -269,7 +269,7 @@ function Workspace() {
               <Workflow className="size-3.5" strokeWidth={2.25} />
             </span>
             <span className="text-sm font-semibold tracking-tight text-ink">
-              VectorShift
+              Pipeline Builder
             </span>
           </div>
 
